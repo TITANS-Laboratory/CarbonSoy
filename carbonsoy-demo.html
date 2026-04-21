@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarbonSoy — Interactive Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Geist+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --carbon: #0C0F0A;
+  --carbon-mid: #1A1F17;
+  --carbon-light: #242B20;
+  --carbon-surface: #2E3629;
+  --neon: #A8E06C;
+  --neon-bright: #C5F288;
+  --neon-dim: #7DB84A;
+  --blue: #5BA4CF;
+  --blue-light: #8DC6E8;
+  --gold: #E8C547;
+  --gold-dim: #B89A30;
+  --red: #E06C6C;
+  --text-bright: #EAEDE6;
+  --text-mid: #B0B8A8;
+  --text-dim: #6E7A66;
+  --border: rgba(168,224,108,0.12);
+  --border-s: rgba(168,224,108,0.25);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--carbon);
+  color: var(--text-bright);
+  min-height: 100vh;
+  padding: 20px 12px;
+}
+
+.app { max-width: 520px; margin: 0 auto; }
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.header-left { display: flex; align-items: center; gap: 10px; }
+
+.logo-mark {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  border: 2px solid var(--neon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--neon);
+}
+
+.logo-name { font-family: 'Instrument Serif', serif; font-size: 1.2rem; }
+.logo-sub { font-family: 'Geist Mono', monospace; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.06em; }
+
+.demo-tag {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--neon);
+  border: 1px solid var(--border-s);
+  border-radius: 100px;
+  padding: 5px 12px;
+  letter-spacing: 0.05em;
+  background: rgba(168,224,108,0.06);
+}
+
+/* Tabs */
+.main-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 18px;
+  background: var(--carbon-mid);
+  border-radius: 12px;
+  padding: 4px;
+  border: 1px solid var(--border);
+}
+
+.main-tab {
+  flex: 1;
+  padding: 10px 6px;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 500;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.main-tab.active { font-weight: 700; }
+.main-tab[data-tab="ci"].active { background: var(--neon); color: var(--carbon); }
+.main-tab[data-tab="econ"].active { background: var(--gold); color: var(--carbon); }
+.main-tab[data-tab="chain"].active { background: var(--blue); color: var(--carbon); }
+
+/* Panels */
+.panel {
+  background: var(--carbon-mid);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+.panel-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+}
+
+.panel-desc {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+/* Form controls */
+.form-group { margin-bottom: 16px; }
+
+.form-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.form-select {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--carbon-light);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-bright);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.92rem;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236E7A66' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.form-select:focus { outline: none; border-color: var(--neon); }
+
+/* Practice toggles */
+.practice-list { display: flex; flex-direction: column; gap: 8px; }
+
+.practice-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--carbon-light);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  transition: border-color 0.2s;
+}
+
+.practice-row.on { border-color: var(--neon); background: rgba(168,224,108,0.04); }
+
+.practice-info { flex: 1; }
+.practice-name { font-size: 0.9rem; font-weight: 600; color: var(--text-bright); }
+.practice-detail { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; }
+
+.toggle {
+  width: 44px; height: 24px;
+  border-radius: 12px;
+  background: var(--carbon-surface);
+  border: 1px solid var(--border);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.toggle.on { background: var(--neon-dim); border-color: var(--neon); }
+
+.toggle::after {
+  content: '';
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  position: absolute;
+  top: 2px; left: 2px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.toggle.on::after { transform: translateX(20px); background: white; }
+
+/* CI Score display */
+.ci-display {
+  background: var(--carbon-light);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  margin-top: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ci-display::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(168,224,108,0.05), transparent 70%);
+  pointer-events: none;
+}
+
+.ci-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+
+.ci-score {
+  font-family: 'Geist Mono', monospace;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--neon);
+  line-height: 1;
+  margin-bottom: 4px;
+  transition: color 0.4s;
+}
+
+.ci-unit {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+
+.ci-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 100px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.ci-change.improved { background: rgba(168,224,108,0.12); color: var(--neon); }
+.ci-change.neutral { background: rgba(110,122,102,0.2); color: var(--text-dim); }
+
+.ci-bar-wrap {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ci-bar-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  min-width: 52px;
+  text-align: right;
+}
+
+.ci-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--carbon-surface);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ci-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease, background 0.5s;
+}
+
+.ci-bar-fill.baseline { background: var(--text-dim); }
+.ci-bar-fill.scenario { background: var(--neon); }
+
+/* Econ cards */
+.econ-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.econ-slider {
+  flex: 1;
+  min-width: 120px;
+  accent-color: var(--gold);
+  height: 4px;
+}
+
+.econ-acres {
+  font-family: 'Geist Mono', monospace;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--gold);
+  background: rgba(232,197,71,0.1);
+  border: 1px solid rgba(232,197,71,0.2);
+  padding: 4px 14px;
+  border-radius: 8px;
+  min-width: 90px;
+  text-align: center;
+}
+
+.econ-card {
+  background: var(--carbon-light);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 10px;
+}
+
+.econ-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.econ-card-action { font-weight: 600; font-size: 0.9rem; flex: 1; }
+
+.econ-card-cost {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.82rem;
+  color: var(--gold);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.econ-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.econ-metric {
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.75rem;
+}
+
+.econ-metric.total { background: rgba(232,197,71,0.08); border: 1px solid rgba(232,197,71,0.15); }
+.econ-metric.premium { background: rgba(168,224,108,0.06); border: 1px solid rgba(168,224,108,0.12); }
+.econ-metric.roi { background: rgba(91,164,207,0.08); border: 1px solid rgba(91,164,207,0.15); }
+
+.econ-metric-label { color: var(--text-dim); margin-bottom: 2px; font-size: 0.68rem; }
+.econ-metric.total .econ-metric-value { color: var(--gold); font-weight: 700; font-family: 'Geist Mono', monospace; }
+.econ-metric.premium .econ-metric-value { color: var(--neon); font-weight: 600; font-size: 0.72rem; }
+.econ-metric.roi .econ-metric-value { color: var(--blue); font-weight: 600; font-size: 0.72rem; }
+
+.econ-risk-bar {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.econ-risk-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  min-width: 70px;
+}
+
+.econ-risk-track {
+  flex: 1;
+  height: 6px;
+  background: var(--carbon-surface);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+
+.econ-risk-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s;
+}
+
+.econ-risk-fill.positive { background: linear-gradient(90deg, var(--neon-dim), var(--neon)); }
+.econ-risk-fill.marginal { background: linear-gradient(90deg, var(--gold-dim), var(--gold)); }
+
+/* Blockchain panel */
+.chain-record {
+  background: var(--carbon-light);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.78rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.chain-record::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--blue);
+  border-radius: 3px 0 0 3px;
+}
+
+.chain-record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.chain-block-num { color: var(--blue); font-weight: 700; }
+
+.chain-status {
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  border-radius: 100px;
+  font-weight: 600;
+}
+
+.chain-status.verified { background: rgba(168,224,108,0.12); color: var(--neon); }
+.chain-status.pending { background: rgba(232,197,71,0.12); color: var(--gold); }
+
+.chain-field { margin-bottom: 4px; color: var(--text-mid); }
+.chain-field span { color: var(--text-dim); }
+
+.chain-hash {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: var(--carbon-surface);
+  border-radius: 6px;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.chain-hash strong { color: var(--blue-light); }
+
+.chain-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--blue);
+  color: var(--carbon);
+  border: none;
+  border-radius: 10px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 14px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.chain-btn:hover { box-shadow: 0 0 30px rgba(91,164,207,0.3); }
+
+.chain-btn.recording {
+  background: var(--carbon-light);
+  color: var(--blue);
+  border: 1px solid var(--blue);
+}
+
+.chain-anim-spinner {
+  width: 16px; height: 16px;
+  border: 2px solid var(--blue);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Summary mini cards in chain */
+.chain-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.chain-summary-card {
+  background: var(--carbon-light);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.chain-summary-num {
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.chain-summary-card:nth-child(1) .chain-summary-num { color: var(--blue); }
+.chain-summary-card:nth-child(2) .chain-summary-num { color: var(--neon); }
+.chain-summary-card:nth-child(3) .chain-summary-num { color: var(--gold); }
+
+.chain-summary-label { font-size: 0.68rem; color: var(--text-dim); }
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 14px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+  margin-top: 10px;
+}
+
+.app-footer strong { color: var(--neon); }
+
+@media (max-width: 420px) {
+  .econ-metrics { grid-template-columns: 1fr; }
+  .chain-summary { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app"></div>
+
+<script>
+// ──── DATA ────
+
+const COUNTIES = [
+  { name:"Jackson County (Carbondale)", region:"Southern", baseline: 28.4 },
+  { name:"Williamson County", region:"Southern", baseline: 28.8 },
+  { name:"Union County", region:"Southern", baseline: 29.1 },
+  { name:"Perry County", region:"Southern", baseline: 28.6 },
+  { name:"Sangamon County (Springfield)", region:"Central", baseline: 26.9 },
+  { name:"Macon County (Decatur)", region:"Central", baseline: 26.5 },
+  { name:"McLean County (Bloomington)", region:"Central", baseline: 25.8 },
+  { name:"Champaign County", region:"Central", baseline: 25.4 },
+  { name:"LaSalle County", region:"Northern", baseline: 25.1 },
+  { name:"DeKalb County", region:"Northern", baseline: 24.8 },
+  { name:"Winnebago County (Rockford)", region:"Northern", baseline: 25.3 },
+];
+
+const PRACTICES = [
+  { id:"notill", name:"No-Till", detail:"Switch from conventional to no-till", ciReduction: 3.2, costPerAcre: -8, premiumFactor: 1.0 },
+  { id:"reducedtill", name:"Reduced Tillage", detail:"Strip-till or minimal tillage", ciReduction: 1.8, costPerAcre: -4, premiumFactor: 0.6 },
+  { id:"cover", name:"Cover Crops", detail:"Cereal rye or crimson clover after harvest", ciReduction: 2.5, costPerAcre: 28, premiumFactor: 0.9 },
+  { id:"inhibitor", name:"Nitrification Inhibitor", detail:"N-Serve, Instinct, or equivalent", ciReduction: 1.1, costPerAcre: 6, premiumFactor: 0.4 },
+  { id:"timing", name:"Spring N Application", detail:"Shift from fall to spring fertilizer timing", ciReduction: 0.8, costPerAcre: 2, premiumFactor: 0.3 },
+];
+
+const ECON_SCENARIOS = [
+  { label:"Conservative", premiumPerBu: 0.08, probability: 70, color:"var(--neon-dim)" },
+  { label:"Expected", premiumPerBu: 0.18, probability: 50, color:"var(--neon)" },
+  { label:"Optimistic", premiumPerBu: 0.35, probability: 25, color:"var(--neon-bright)" },
+];
+
+// ──── STATE ────
+
+let S = {
+  tab: "ci",
+  county: 0,
+  practices: { notill: false, reducedtill: false, cover: false, inhibitor: false, timing: false },
+  acres: 800,
+  chainRecords: [],
+  chainRecording: false,
+};
+
+// ──── HELPERS ────
+
+function getBaseline() { return COUNTIES[S.county].baseline; }
+
+function getReduction() {
+  let r = 0;
+  PRACTICES.forEach(p => { if (S.practices[p.id]) r += p.ciReduction; });
+  // No-till and reduced till don't stack fully
+  if (S.practices.notill && S.practices.reducedtill) r -= 0.8;
+  return r;
+}
+
+function getScore() { return Math.max(getBaseline() - getReduction(), 12); }
+
+function getAdoptionCost() {
+  let c = 0;
+  PRACTICES.forEach(p => { if (S.practices[p.id]) c += p.costPerAcre; });
+  return c;
+}
+
+function fakeHash() {
+  const chars = "0123456789abcdef";
+  let h = "0x";
+  for (let i = 0; i < 40; i++) h += chars[Math.floor(Math.random() * 16)];
+  return h;
+}
+
+function activePracticeNames() {
+  return PRACTICES.filter(p => S.practices[p.id]).map(p => p.name);
+}
+
+// ──── RENDER ────
+
+function render() {
+  const baseline = getBaseline();
+  const score = getScore();
+  const reduction = getReduction();
+  const pctReduction = ((reduction / baseline) * 100).toFixed(1);
+  const county = COUNTIES[S.county];
+  const adoptionCost = getAdoptionCost();
+
+  let h = '';
+
+  // Header
+  h += `<div class="header">
+    <div class="header-left">
+      <div class="logo-mark">CO₂</div>
+      <div><div class="logo-name">CarbonSoy</div><div class="logo-sub">INTERACTIVE DEMO</div></div>
+    </div>
+    <div class="demo-tag">DEMO</div>
+  </div>`;
+
+  // Tabs
+  h += `<div class="main-tabs">
+    <button class="main-tab${S.tab==='ci'?' active':''}" data-tab="ci" onclick="setTab('ci')">📊 CI Score</button>
+    <button class="main-tab${S.tab==='econ'?' active':''}" data-tab="econ" onclick="setTab('econ')">💰 Economics</button>
+    <button class="main-tab${S.tab==='chain'?' active':''}" data-tab="chain" onclick="setTab('chain')">🔗 Blockchain</button>
+  </div>`;
+
+  // ── CI TAB ──
+  if (S.tab === 'ci') {
+    h += `<div class="panel">
+      <div class="panel-title">Carbon Intensity Scenario Calculator</div>
+      <div class="panel-desc">Select your county and toggle practices to model your CI score.</div>
+
+      <div class="form-group">
+        <label class="form-label">County</label>
+        <select class="form-select" onchange="S.county=Number(this.value);render()">`;
+    COUNTIES.forEach((c,i) => {
+      h += `<option value="${i}"${i===S.county?' selected':''}>${c.name} (${c.region} IL)</option>`;
+    });
+    h += `</select></div>
+
+      <div class="form-group">
+        <label class="form-label">Climate-Smart Practices</label>
+        <div class="practice-list">`;
+    PRACTICES.forEach(p => {
+      const on = S.practices[p.id];
+      h += `<div class="practice-row${on?' on':''}">
+        <div class="practice-info">
+          <div class="practice-name">${p.name}</div>
+          <div class="practice-detail">${p.detail} · CI: -${p.ciReduction} gCO₂e/bu</div>
+        </div>
+        <div class="toggle${on?' on':''}" onclick="S.practices['${p.id}']=!S.practices['${p.id}'];render()"></div>
+      </div>`;
+    });
+    h += `</div></div>`;
+
+    // Score display
+    const changeClass = reduction > 0 ? 'improved' : 'neutral';
+    const changeText = reduction > 0 ? `↓ ${pctReduction}% reduction` : 'No change — toggle practices above';
+    const baselinePct = (baseline / 35 * 100).toFixed(0);
+    const scorePct = (score / 35 * 100).toFixed(0);
+
+    h += `<div class="ci-display">
+      <div class="ci-label">Your Estimated CI Score</div>
+      <div class="ci-score" style="color:${reduction > 5 ? 'var(--neon-bright)' : reduction > 0 ? 'var(--neon)' : 'var(--text-mid)'}">${score.toFixed(1)}</div>
+      <div class="ci-unit">gCO₂e per bushel of soybeans</div>
+      <div class="ci-change ${changeClass}">${changeText}</div>
+
+      <div class="ci-bar-wrap" style="margin-top:16px">
+        <div class="ci-bar-label">Baseline</div>
+        <div class="ci-bar"><div class="ci-bar-fill baseline" style="width:${baselinePct}%"></div></div>
+        <div style="font-family:'Geist Mono',monospace;font-size:0.75rem;color:var(--text-dim);min-width:40px">${baseline.toFixed(1)}</div>
+      </div>
+      <div class="ci-bar-wrap">
+        <div class="ci-bar-label">Scenario</div>
+        <div class="ci-bar"><div class="ci-bar-fill scenario" style="width:${scorePct}%"></div></div>
+        <div style="font-family:'Geist Mono',monospace;font-size:0.75rem;color:var(--neon);min-width:40px">${score.toFixed(1)}</div>
+      </div>
+    </div>`;
+
+    h += `</div>`; // panel
+  }
+
+  // ── ECONOMICS TAB ──
+  if (S.tab === 'econ') {
+    h += `<div class="panel">
+      <div class="panel-title">Risk-Adjusted Economics</div>
+      <div class="panel-desc">See how CI score improvements translate to potential market premiums under different scenarios. Adjust your acreage.</div>
+
+      <div class="econ-slider-wrap">
+        <span class="form-label" style="margin:0">Acreage</span>
+        <input type="range" class="econ-slider" min="50" max="5000" step="50" value="${S.acres}" oninput="S.acres=Number(this.value);render()">
+        <span class="econ-acres">${S.acres.toLocaleString()} ac</span>
+      </div>`;
+
+    if (reduction <= 0) {
+      h += `<div style="text-align:center;padding:40px 20px;color:var(--text-dim);font-size:0.9rem;">
+        <div style="font-size:2rem;margin-bottom:10px;">📊</div>
+        Toggle practices in the CI Score tab first to see economic projections.
+      </div>`;
+    } else {
+      const yieldBu = 55; // avg IL soybean yield
+      const totalBu = S.acres * yieldBu;
+
+      ECON_SCENARIOS.forEach(sc => {
+        const annualPremium = totalBu * sc.premiumPerBu;
+        const totalAdoptionCost = adoptionCost * S.acres;
+        const netReturn = annualPremium - Math.max(totalAdoptionCost, 0);
+        const roiPct = totalAdoptionCost > 0 ? ((netReturn / totalAdoptionCost) * 100).toFixed(0) : '∞';
+        const positive = netReturn > 0;
+        const riskWidth = sc.probability;
+
+        h += `<div class="econ-card">
+          <div class="econ-card-header">
+            <span class="econ-card-action">${sc.label} Scenario</span>
+            <span class="econ-card-cost">$${sc.premiumPerBu.toFixed(2)}/bu premium</span>
+          </div>
+          <div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:10px;">${sc.probability}% probability based on current market signals</div>
+          <div class="econ-metrics">
+            <div class="econ-metric total">
+              <div class="econ-metric-label">Annual Premium</div>
+              <div class="econ-metric-value">$${annualPremium.toLocaleString(undefined,{maximumFractionDigits:0})}</div>
+            </div>
+            <div class="econ-metric premium">
+              <div class="econ-metric-label">Adoption Cost</div>
+              <div class="econ-metric-value">${totalAdoptionCost <= 0 ? 'Saves $'+Math.abs(totalAdoptionCost).toLocaleString() : '$'+totalAdoptionCost.toLocaleString()}/yr</div>
+            </div>
+            <div class="econ-metric roi">
+              <div class="econ-metric-label">Net Return</div>
+              <div class="econ-metric-value" style="color:${positive?'var(--neon)':'var(--red)'}">$${netReturn.toLocaleString(undefined,{maximumFractionDigits:0})}/yr</div>
+            </div>
+          </div>
+          <div class="econ-risk-bar">
+            <div class="econ-risk-label">Likelihood</div>
+            <div class="econ-risk-track">
+              <div class="econ-risk-fill ${positive?'positive':'marginal'}" style="width:${riskWidth}%"></div>
+            </div>
+            <div style="font-family:'Geist Mono',monospace;font-size:0.68rem;color:var(--text-dim)">${riskWidth}%</div>
+          </div>
+        </div>`;
+      });
+
+      // Per-acre summary
+      const expectedPremPerAcre = (yieldBu * 0.18).toFixed(2);
+      const costPerAcre = adoptionCost;
+      const netPerAcre = (yieldBu * 0.18 - Math.max(costPerAcre, 0)).toFixed(2);
+
+      h += `<div style="background:var(--carbon-light);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:4px;">
+        <div style="font-family:'Geist Mono',monospace;font-size:0.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Per-Acre Summary (Expected)</div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;">
+          <span style="color:var(--text-mid)">Premium income</span>
+          <span style="color:var(--gold);font-family:'Geist Mono',monospace;font-weight:600">+$${expectedPremPerAcre}/ac</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-top:4px;">
+          <span style="color:var(--text-mid)">Practice cost</span>
+          <span style="color:${costPerAcre>0?'var(--red)':'var(--neon)'};font-family:'Geist Mono',monospace;font-weight:600">${costPerAcre>0?'-':'+'}\$${Math.abs(costPerAcre)}/ac</span>
+        </div>
+        <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between;font-size:0.95rem;">
+          <span style="color:var(--text-bright);font-weight:600">Net per acre</span>
+          <span style="color:var(--neon);font-family:'Geist Mono',monospace;font-weight:700">+$${netPerAcre}/ac</span>
+        </div>
+      </div>`;
+    }
+
+    h += `</div>`;
+  }
+
+  // ── BLOCKCHAIN TAB ──
+  if (S.tab === 'chain') {
+    const active = activePracticeNames();
+    const hasRecords = S.chainRecords.length > 0;
+
+    h += `<div class="panel">
+      <div class="panel-title">Blockchain Practice Verification</div>
+      <div class="panel-desc">Record your CSA practices on an immutable ledger. Each entry is cryptographically hashed and timestamped — creating verifiable proof for biofuel buyers.</div>
+
+      <div class="chain-summary">
+        <div class="chain-summary-card">
+          <div class="chain-summary-num">${S.chainRecords.length}</div>
+          <div class="chain-summary-label">Blocks Recorded</div>
+        </div>
+        <div class="chain-summary-card">
+          <div class="chain-summary-num">${active.length}</div>
+          <div class="chain-summary-label">Active Practices</div>
+        </div>
+        <div class="chain-summary-card">
+          <div class="chain-summary-num">${score.toFixed(1)}</div>
+          <div class="chain-summary-label">Current CI Score</div>
+        </div>
+      </div>`;
+
+    if (active.length === 0) {
+      h += `<div style="text-align:center;padding:30px 20px;color:var(--text-dim);font-size:0.9rem;">
+        <div style="font-size:2rem;margin-bottom:10px;">🔗</div>
+        Enable practices in the CI Score tab to record them on the blockchain.
+      </div>`;
+    } else {
+      if (S.chainRecording) {
+        h += `<button class="chain-btn recording" disabled>
+          <span class="chain-anim-spinner"></span> Recording to ledger...
+        </button>`;
+      } else {
+        h += `<button class="chain-btn" onclick="recordToChain()">
+          ⛓️ Record Current Practices to Blockchain
+        </button>`;
+      }
+    }
+
+    // Existing records
+    if (hasRecords) {
+      h += `<div style="margin-top:18px;">
+        <div class="form-label" style="margin-bottom:10px">Ledger History</div>`;
+      S.chainRecords.slice().reverse().forEach((rec, idx) => {
+        const blockNum = S.chainRecords.length - idx;
+        h += `<div class="chain-record">
+          <div class="chain-record-header">
+            <span class="chain-block-num">Block #${blockNum}</span>
+            <span class="chain-status verified">✓ Verified</span>
+          </div>
+          <div class="chain-field"><span>Timestamp:</span> ${rec.timestamp}</div>
+          <div class="chain-field"><span>County:</span> ${rec.county}</div>
+          <div class="chain-field"><span>Practices:</span> ${rec.practices.join(', ')}</div>
+          <div class="chain-field"><span>CI Score:</span> ${rec.ciScore} gCO₂e/bu</div>
+          <div class="chain-hash"><strong>SHA-256:</strong> ${rec.hash}</div>
+        </div>`;
+      });
+      h += `</div>`;
+    }
+
+    h += `</div>`;
+  }
+
+  // Footer
+  h += `<div class="app-footer">
+    <strong>CarbonSoy Demo</strong> — Prototype demonstrating the proposed tool. CI values are representative, based on USDA FD-CIC methodology. Economic scenarios are illustrative.<br>
+    SIU Carbondale · Khalil · ISA FY27 Proposal
+  </div>`;
+
+  document.getElementById('app').innerHTML = h;
+}
+
+// ──── ACTIONS ────
+
+function setTab(t) { S.tab = t; render(); }
+
+function recordToChain() {
+  S.chainRecording = true;
+  render();
+  setTimeout(() => {
+    const now = new Date();
+    S.chainRecords.push({
+      timestamp: now.toISOString().replace('T',' ').substring(0,19) + ' UTC',
+      county: COUNTIES[S.county].name,
+      practices: activePracticeNames(),
+      ciScore: getScore().toFixed(1),
+      hash: fakeHash(),
+    });
+    S.chainRecording = false;
+    render();
+  }, 2200);
+}
+
+// ──── INIT ────
+render();
+</script>
+
+</body>
+</html>

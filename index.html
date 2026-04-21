@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarbonSoy</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Geist+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --carbon: #0C0F0A;
+  --carbon-mid: #1A1F17;
+  --carbon-light: #242B20;
+  --carbon-surface: #2E3629;
+  --neon-green: #A8E06C;
+  --neon-bright: #C5F288;
+  --neon-dim: #7DB84A;
+  --chain-blue: #5BA4CF;
+  --chain-light: #8DC6E8;
+  --gold-warm: #E8C547;
+  --gold-dim: #B89A30;
+  --cream: #F0EDE4;
+  --text-bright: #EAEDE6;
+  --text-mid: #B0B8A8;
+  --text-dim: #6E7A66;
+  --border: rgba(168,224,108,0.12);
+  --border-strong: rgba(168,224,108,0.25);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  color: var(--text-bright);
+  background: var(--carbon);
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(168,224,108,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168,224,108,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  filter: blur(180px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.hero-glow-1 { background: var(--neon-green); top: -20%; right: -10%; }
+.hero-glow-2 { background: var(--chain-blue); bottom: -30%; left: -15%; opacity: 0.08; }
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 200px;
+  background: linear-gradient(to top, var(--carbon), transparent);
+  pointer-events: none;
+}
+
+/* Nav */
+.nav {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  padding: 1.5rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+
+.logo-mark {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  border: 2px solid var(--neon-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--neon-green);
+  letter-spacing: 0.05em;
+  position: relative;
+}
+
+.logo-mark::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 14px;
+  border: 1px solid rgba(168,224,108,0.15);
+}
+
+.logo-name {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.4rem;
+  color: var(--text-bright);
+}
+
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: color 0.3s;
+  font-family: 'Geist Mono', monospace;
+  letter-spacing: 0.02em;
+}
+
+.nav-links a:hover { color: var(--neon-green); }
+
+/* Hero content */
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+  animation: fadeUp 1s ease-out;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 100px;
+  padding: 0.45rem 1.1rem;
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--neon-green);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  background: rgba(168,224,108,0.06);
+}
+
+.hero-tag::before {
+  content: '';
+  width: 7px; height: 7px;
+  background: var(--neon-green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+.hero h1 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  color: var(--text-bright);
+  line-height: 1.08;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+  font-weight: 400;
+}
+
+.hero h1 .accent { color: var(--neon-green); }
+.hero h1 .accent-blue { color: var(--chain-blue); }
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--text-mid);
+  line-height: 1.75;
+  max-width: 580px;
+  margin: 0 auto 2.5rem;
+  font-weight: 300;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--neon-green);
+  color: var(--carbon);
+  padding: 0.9rem 1.8rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+  box-shadow: 0 0 30px rgba(168,224,108,0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 50px rgba(168,224,108,0.35);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: transparent;
+  color: var(--text-bright);
+  padding: 0.9rem 1.8rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+  border: 1px solid var(--border-strong);
+}
+
+.btn-secondary:hover {
+  background: rgba(168,224,108,0.08);
+  border-color: var(--neon-green);
+}
+
+/* ── SECTIONS ── */
+section { padding: 6rem 2rem; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+
+.section-tag {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--neon-green);
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: var(--text-bright);
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  font-weight: 400;
+}
+
+.section-desc {
+  font-size: 1.05rem;
+  color: var(--text-mid);
+  line-height: 1.75;
+  max-width: 620px;
+  font-weight: 300;
+}
+
+/* ── PROBLEM ── */
+.problem { background: var(--carbon-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-top: 3rem;
+}
+
+.problem-text { font-size: 0.95rem; color: var(--text-mid); line-height: 1.8; font-weight: 300; }
+.problem-text + .problem-text { margin-top: 1.2rem; }
+
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+
+.stat-card {
+  background: var(--carbon-light);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.6rem;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.stat-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-3px);
+}
+
+.stat-num {
+  font-family: 'Geist Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--neon-green);
+  margin-bottom: 0.3rem;
+}
+
+.stat-label { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+
+/* ── FEATURES ── */
+.features { background: var(--carbon); }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3.5rem;
+}
+
+.feature-card {
+  background: var(--carbon-mid);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 2.2rem 1.8rem;
+  transition: border-color 0.3s, transform 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-4px);
+}
+
+.feature-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+
+.feature-card:nth-child(1)::after { background: linear-gradient(90deg, var(--neon-green), transparent); }
+.feature-card:nth-child(2)::after { background: linear-gradient(90deg, var(--gold-warm), transparent); }
+.feature-card:nth-child(3)::after { background: linear-gradient(90deg, var(--chain-blue), transparent); }
+
+.feature-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 1.3rem;
+}
+
+.feature-card:nth-child(1) .feature-icon { background: rgba(168,224,108,0.1); }
+.feature-card:nth-child(2) .feature-icon { background: rgba(232,197,71,0.1); }
+.feature-card:nth-child(3) .feature-icon { background: rgba(91,164,207,0.1); }
+
+.feature-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-bright);
+}
+
+.feature-desc { font-size: 0.9rem; color: var(--text-mid); line-height: 1.7; font-weight: 300; }
+
+/* ── HOW IT WORKS ── */
+.how-it-works { background: var(--carbon-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.step {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  position: relative;
+}
+
+.step-num {
+  font-family: 'Geist Mono', monospace;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--carbon-surface);
+  margin-bottom: 0.8rem;
+  line-height: 1;
+  -webkit-text-stroke: 1px var(--neon-dim);
+}
+
+.step-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.1rem;
+  color: var(--text-bright);
+  margin-bottom: 0.6rem;
+}
+
+.step-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; }
+
+.step-arrow {
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--neon-dim);
+  font-size: 1.2rem;
+  opacity: 0.5;
+}
+
+/* ── TEAM ── */
+.team { background: var(--carbon); }
+
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.team-card {
+  background: var(--carbon-mid);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 2.5rem;
+  display: flex;
+  gap: 1.5rem;
+  transition: border-color 0.3s;
+}
+
+.team-card:hover { border-color: var(--border-strong); }
+
+.team-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Geist Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.team-card:nth-child(1) .team-avatar {
+  background: linear-gradient(135deg, var(--carbon-surface), var(--carbon-light));
+  color: var(--neon-green);
+  border: 2px solid var(--neon-green);
+}
+
+.team-card:nth-child(2) .team-avatar {
+  background: linear-gradient(135deg, var(--carbon-surface), var(--carbon-light));
+  color: var(--gold-warm);
+  border: 2px solid var(--gold-warm);
+}
+
+.team-name { font-family: 'Instrument Serif', serif; font-size: 1.2rem; color: var(--text-bright); margin-bottom: 0.2rem; }
+
+.team-role {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.team-card:nth-child(1) .team-role { color: var(--neon-green); }
+.team-card:nth-child(2) .team-role { color: var(--gold-warm); }
+
+.team-dept { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 0.8rem; }
+.team-focus { font-size: 0.85rem; color: var(--text-mid); line-height: 1.65; font-weight: 300; }
+
+/* ── FUNDING ── */
+.funding {
+  background: linear-gradient(165deg, var(--carbon-mid), var(--carbon));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.funding-items { display: flex; gap: 2rem; margin-top: 2.5rem; flex-wrap: wrap; }
+
+.funding-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--carbon-light);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.3rem 1.8rem;
+}
+
+.funding-icon {
+  width: 46px; height: 46px;
+  border-radius: 10px;
+  background: rgba(168,224,108,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.funding-name { font-weight: 600; font-size: 0.92rem; color: var(--text-bright); }
+.funding-sub { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.15rem; }
+
+/* ── CONTACT ── */
+.contact { background: var(--carbon); }
+
+.contact-box {
+  background: var(--carbon-mid);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin-top: 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.contact-info h3 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.35rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-bright);
+}
+
+.contact-item { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.3rem; }
+
+.contact-icon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: rgba(168,224,108,0.06);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.contact-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.15rem;
+}
+
+.contact-value { font-size: 0.92rem; color: var(--text-bright); font-weight: 500; }
+.contact-value a { color: var(--neon-green); text-decoration: none; }
+.contact-value a:hover { text-decoration: underline; }
+
+.contact-side {
+  background: var(--carbon-light);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.contact-side-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.contact-side-title { font-family: 'Instrument Serif', serif; font-size: 1.1rem; color: var(--text-bright); margin-bottom: 0.5rem; }
+.contact-side-sub { font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--carbon-mid);
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 2rem;
+  text-align: center;
+  font-size: 0.82rem;
+}
+
+footer a { color: var(--neon-green); text-decoration: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .problem-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .features-grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr 1fr; }
+  .step-arrow { display: none; }
+  .team-grid { grid-template-columns: 1fr; }
+  .contact-box { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  section { padding: 4rem 1.2rem; }
+  .hero { padding: 1.5rem; }
+  .stat-grid { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+  .team-card { flex-direction: column; text-align: center; }
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+
+  <nav class="nav">
+    <a href="#" class="logo">
+      <div class="logo-mark">CO₂</div>
+      <span class="logo-name">CarbonSoy</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero-content">
+    <div class="hero-tag">ISA FY27 Research Proposal</div>
+    <h1>Know Your <span class="accent">Carbon Score</span>.<br>Capture the <span class="accent-blue">Market Value</span>.</h1>
+    <p class="hero-sub">
+      An interactive scenario tool that helps Illinois soybean farmers model their Carbon Intensity score, evaluate practice changes, and access emerging 45Z market premiums — with blockchain-verified traceability.
+    </p>
+    <div class="hero-buttons">
+      <a href="#problem" class="btn-primary">Explore the Project →</a>
+      <a href="carbonsoy-demo.html" class="btn-secondary" target="_blank">▶ &nbsp;Try the Interactive Demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="section-inner">
+    <div class="section-tag">The Opportunity</div>
+    <div class="section-title">A New Market Is Forming.<br>Most Farmers Don't Know Yet.</div>
+
+    <div class="problem-grid">
+      <div>
+        <p class="problem-text">
+          The 45Z Clean Fuel Production Tax Credit is changing how biofuel processors value soybean feedstock. Under this framework, lower Carbon Intensity scores mean higher tax credits; and processors will pay premiums for soybeans grown with documented climate-smart practices.
+        </p>
+        <p class="problem-text">
+          But the ISA February 2026 Researcher Roundtable found that most Illinois farmers have little to no understanding of what a CI score is, how it affects their operation, or whether changing practices is economically worthwhile. They specifically called for scenario tools that let farmers see how their CI score would change with different practices.
+        </p>
+        <p class="problem-text">
+          CarbonSoy fills this gap: combining an interactive CI scenario calculator with risk-adjusted economics and a blockchain verification prototype for the emerging 45Z supply chain.
+        </p>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card reveal">
+          <div class="stat-num">45Z</div>
+          <div class="stat-label">Clean Fuel Tax Credit creating new market signals for low-CI feedstock</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-num">55%</div>
+          <div class="stat-label">Of soybean biodiesel emissions come from feedstock production practices</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-num">~0</div>
+          <div class="stat-label">Farmer-facing CI score tools that exist for Illinois soybean producers today</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-num">$/bu</div>
+          <div class="stat-label">Potential premium for soybeans with verified lower Carbon Intensity scores</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-inner">
+    <div class="section-tag">Core Modules</div>
+    <div class="section-title">Three Tools, One Platform</div>
+    <div class="section-desc">Each module addresses a distinct piece of the CI puzzle: from understanding your score, to evaluating the economics, to proving your practices.</div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">CI Scenario Calculator</div>
+        <div class="feature-desc">
+          Select your county. Enter your current practices: tillage, cover crops, nitrogen management, fertilizer timing. See your baseline CI score in gCO₂e/bushel. Toggle practices on and off to model how your score changes; individually or stacked. Built on USDA FD-CIC county-level data for every Illinois soybean-producing county.
+        </div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">Risk-Adjusted Economics</div>
+        <div class="feature-desc">
+          Every CI scenario links to financial projections. See estimated per-bushel premiums, per-acre adoption costs, net ROI with confidence intervals, and payback timelines for your acreage. Not optimistic guesses: probability-weighted scenarios built by a commodity markets economist with real-world trading experience.
+        </div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔗</div>
+        <div class="feature-title">Blockchain Verification</div>
+        <div class="feature-desc">
+          The 45Z framework requires verifiable CI claims from farm to processor. CarbonSoy prototypes a lightweight blockchain ledger that creates tamper-resistant, auditable records of your CSA practice data; so when a biofuel plant asks for proof, you have a cryptographically verified answer. Built by a blockchain security researcher.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works" id="how">
+  <div class="section-inner">
+    <div class="section-tag">User Flow</div>
+    <div class="section-title">From Field to Score in Four Steps</div>
+    <div class="section-desc">CarbonSoy is designed for <b>farmers</b>, not data scientists. The entire process takes under five minutes.</div>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-title">Select Your Location</div>
+        <div class="step-desc">Choose your county and crop rotation. CarbonSoy loads regional CI baselines calibrated to your area.</div>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-title">Enter Your Practices</div>
+        <div class="step-desc">Tell us your tillage type, cover crop use, nitrogen management, and fertilizer timing. Simple dropdowns — no jargon.</div>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-title">Explore Scenarios</div>
+        <div class="step-desc">Toggle practices on and off. See your CI score change in real time. Each scenario shows the economics: costs, premiums, ROI, payback.</div>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <div class="step-title">Verify & Export</div>
+        <div class="step-desc">Record your practices on the blockchain ledger. Export a verified CI report to share with elevators or biofuel buyers.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team" id="team">
+  <div class="section-inner">
+    <div class="section-tag">Research Team</div>
+    <div class="section-title">Blockchain Security Meets<br>Commodity Market Economics</div>
+    <div class="section-desc">A focused team pairing CS/AI expertise with real-world agricultural market analysis at SIU Carbondale.</div>
+
+    <!-- <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-avatar">AK</div>
+        <div>
+          <div class="team-name">Dr. Alvi Ataur Khalil</div>
+          <div class="team-role">Principal Investigator</div>
+          <div class="team-dept">School of Computing</div>
+          <div class="team-focus">
+            Blockchain security, machine learning, and software engineering. 19 publications including 7+ on blockchain security at top venues (ACSAC, DSN, SecureComm). NSF I-Corps trained with 105 customer discovery interviews. Leads app development, blockchain verification module, and ML anomaly detection.
+          </div>
+        </div>
+      </div>
+
+      <div class="team-card reveal">
+        <div class="team-avatar">DS</div>
+        <div>
+          <div class="team-name">Dr. X (Yet to be finalized)</div>
+          <div class="team-role">Co-Principal Investigator</div>
+          <div class="team-dept">Agribusiness Economics</div>
+          <div class="team-focus">
+            Commodity markets, risk management, forecasting, and development of new agricultural markets. Industry experience in production agriculture, commodity futures brokerage, and executive roles at Pillsbury and Darden Restaurants. Leads economic scenario modeling, risk assessment, and CI-to-market-value translation.
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</section>
+
+<!-- FUNDING -->
+<section class="funding">
+  <div class="section-inner">
+    <div class="section-tag">Funding & Affiliation</div>
+    <div class="section-title">Intended to be supported by Illinois<br>Soybean Checkoff Dollars</div>
+    <div class="section-desc">
+      Proposed for funding through the Illinois Soybean Association Checkoff Program, FY27: representing more than 43,000 Illinois soybean farmers.
+    </div>
+
+    <div class="funding-items">
+      <div class="funding-item">
+        <div class="funding-icon">🫘</div>
+        <div>
+          <div class="funding-name">Illinois Soybean Association</div>
+          <div class="funding-sub">Checkoff Program — FY27</div>
+        </div>
+      </div>
+      <div class="funding-item">
+        <div class="funding-icon">🎓</div>
+        <div>
+          <div class="funding-name">Southern Illinois University</div>
+          <div class="funding-sub">Carbondale: R1 Research University</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-inner">
+    <div class="section-tag">Get In Touch</div>
+    <div class="section-title">Interested in the CI Score<br>Landscape? Let's Talk.</div>
+    <div class="section-desc">
+      We're seeking Illinois soybean farmers to pilot-test CarbonSoy, and industry partners interested in blockchain-verified CI traceability.
+    </div>
+
+    <div class="contact-box">
+      <div class="contact-info">
+        <h3>Contact the PI</h3>
+        <div class="contact-item">
+          <div class="contact-icon">👤</div>
+          <div>
+            <div class="contact-label">Principal Investigator</div>
+            <div class="contact-value">Dr. Alvi Ataur Khalil</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-value"><a href="mailto:a.khalil@siu.edu">a.khalil@siu.edu</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-label">Phone</div>
+            <div class="contact-value">(618) 453-4656</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🏛️</div>
+          <div>
+            <div class="contact-label">Department</div>
+            <div class="contact-value">School of Computing, SIU Carbondale</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-side">
+        <div class="contact-side-icon">⛓️</div>
+        <div class="contact-side-title">Blockchain + Agriculture</div>
+        <div class="contact-side-sub">
+          Where cryptographic verification meets<br>
+          climate-smart farming — building trust<br>
+          in the emerging carbon marketplace.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2026 CarbonSoy — Southern Illinois University Carbondale. Proposed for funding by the <a href="https://www.ilsoy.org/" target="_blank">Illinois Soybean Association</a> Checkoff Program.</p>
+  <p style="margin-top: 0.4rem; font-size: 0.75rem; opacity: 0.6;">School of Computing &amp; Agribusiness Economics</p>
+</footer>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
